@@ -1,5 +1,3 @@
-<script setup lang="ts"></script>
-
 <template>
   <div>
     <a href="http://smallfish.space" target="_blank">
@@ -7,6 +5,10 @@
     </a>
   </div>
 </template>
+
+<script setup lang="ts">
+
+</script>
 
 <style scoped>
 .logo {
