@@ -99,7 +99,6 @@ module.exports = {
             },
         ],
         'vue/html-indent': ['warn', 4],
-        'vue/html-quotes': ['warn', 'single'],
         'vue/max-attributes-per-line': ['warn', {
             singleline: {
                 max: 3,
