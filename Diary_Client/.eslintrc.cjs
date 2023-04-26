@@ -21,6 +21,7 @@ module.exports = {
         'no-console': 'off',
         'no-bitwise': 'off',
         'no-tabs': 'off',
+        'vue/no-deprecated-slot-attribute': 'off',
         'array-element-newline': ['warn', 'consistent'],
         indent: ['warn', 4, { MemberExpression: 0, SwitchCase: 1, ignoredNodes: ['TemplateLiteral'] }],
         quotes: ['warn', 'single'],
@@ -32,7 +33,7 @@ module.exports = {
         'import/extensions': 'off',
         'eol-last': 'off',
         'no-shadow': 'off',
-        'no-unused-vars': 'warn',
+        'no-unused-vars': 'off',
         'import/no-cycle': 'off',
         'arrow-parens': 'off',
         semi: ['error', 'never'],
@@ -70,6 +71,7 @@ module.exports = {
         'template-curly-spacing': 'off',
         'vue/valid-v-for': 'off',
         '@typescript-eslint/no-var-requires': 'off',
+        '@typescript-eslint/no-unused-vars': 'off',
         '@typescript-eslint/no-empty-function': 'off',
         'no-empty': 'off',
         '@typescript-eslint/no-explicit-any': 'off',
@@ -88,13 +90,6 @@ module.exports = {
             'never',
             {
                 autofix: true,
-                ignore: [],
-            },
-        ],
-        'vue/attribute-hyphenation': [
-            'warn',
-            'never',
-            {
                 ignore: [],
             },
         ],
