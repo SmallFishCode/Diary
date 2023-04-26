@@ -1,3 +1,4 @@
+import { IIsOnlineReq } from '@/server/login'
 import axios, { AxiosResponse } from 'axios'
 import type { AxiosInstance, AxiosRequestConfig } from 'axios'
 import { showFailToast, showSuccessToast } from 'vant'
@@ -13,6 +14,7 @@ const config: AxiosRequestConfig = {
     timeout: DEFAULT_TIME_OUT,
     headers: {
         Accept: 'application/json',
+        token: localStorage.getItem('token') || 'defaultToken',
     },
     withCredentials: true,
 }
@@ -34,13 +36,18 @@ export interface AjaxResponse<T> {
     result: number;
     data: T;
     message: string;
+    userInfo?: IIsOnlineReq
 }
 
 // 封装响应拦截
 const responseInterceptor = <T>(res: AxiosResponse<AjaxResponse<T>>) => {
-    if (res.status === 200) {
+    if (res.status === 200 && res.data.result === 200) {
+        if (res.data.userInfo) {
+            localStorage.setItem('token', res.data.userInfo.token)
+            localStorage.setItem('username', res.data.userInfo.username)
+        }
         showSuccessToast({ message: res.data.message, duration: 300 })
-    }
+    } 
 
     return res
 }

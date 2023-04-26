@@ -11,7 +11,9 @@
   "author": "SmallFish",
   "license": "ISC",
   "dependencies": {
+    "dayjs": "^1.11.7",
     "fish-node": "^1.0.6",
+    "js-md5": "^0.7.3",
     "nodemon": "^2.0.22"
   }
 }

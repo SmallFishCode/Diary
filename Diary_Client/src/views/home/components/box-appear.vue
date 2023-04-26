@@ -25,13 +25,12 @@ const style = computed(() => ({
 .box-container {
     display: flex;
     justify-content: center;
-    height: 100%;
-    position: fixed;
     opacity: 0;
     transform: scale(0) rotate(0deg);
-    transition: all 2s ease-in-out;
+    transition: all 1.5s ease-in-out;
     box-sizing: border-box;
     margin-top: 50px;
+    position: absolute;
 
     .box {
         height: 300px;
@@ -43,7 +42,7 @@ const style = computed(() => ({
 }
 
 .appear {
-    opacity: 1;
+    opacity: 0.7;
     transform: scale(1) rotate(720deg);
 }
 

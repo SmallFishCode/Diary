@@ -24,7 +24,7 @@
                     round
                     block
                     type="default"
-                    nativeType="submit"
+                    native-type="submit"
                 >
                     Register
                 </van-button>
@@ -58,8 +58,6 @@ const onSubmit = (values: RegisterReq) => {
         })
     }
 }
-
-const onClickLeft = () => router.back()
 
 </script>
 

@@ -1,9 +1,11 @@
 module.exports = {
         index: async (fish) => {
+                const md5 = require('js-md5')
+                const dayjs = require('dayjs')
+
                 try {
                         const {username, password} = fish.ctx.request.body
                         const res = await fish.$mysqlAsync.query(`SELECT * FROM register`)
-                        console.log('The user table contains: ', res[0]);
                         const isExit = res[0].some(item => item.username === username)
                         if (isExit) {
                                 fish.ctx.status = 402
@@ -13,7 +15,8 @@ module.exports = {
                                 message: '账号已存在,注册失败！'
                                 }
                         } else {
-                                await fish.$mysqlAsync.query(`INSERT INTO register (id, username, password) VALUES ('${res[0].length + 1}', "${username}", "${password}")`)
+                                const token = md5(username + password + '322603')
+                                await fish.$mysqlAsync.query(`INSERT INTO register (id, username, password, createTime, token) VALUES ('${res[0].length + 1}', "${username}", "${password}", "${dayjs().format('YYYY-MM-DD HH:mm')}", "${token}")`)
                                 fish.ctx.body = {
                                         result: 200,
                                         data: null,
