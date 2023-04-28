@@ -26,8 +26,8 @@ const style = computed(() => ({
     display: flex;
     justify-content: center;
     opacity: 0;
-    transform: scale(0) rotate(0deg);
-    transition: all 1.5s ease-in-out;
+    transform: scale(0) translateY(-300px);
+    transition: all .7s ease-in-out;
     box-sizing: border-box;
     margin-top: 50px;
     position: absolute;
@@ -42,8 +42,8 @@ const style = computed(() => ({
 }
 
 .appear {
-    opacity: 0.7;
-    transform: scale(1) rotate(720deg);
+    opacity: 1;
+    transform: scale(1) translateY(0px);
 }
 
 </style>

@@ -1,9 +1,8 @@
-import { useRouter } from 'vue-router'
 import { showFailToast } from 'vant'
+import { Router } from 'vue-router'
 import { IIsOnlineReq, isOnlineReq } from '@/server/login'
 
-export const isOnline = () => {
-    const router = useRouter()
+export const isOnline = (router: Router) => {
     const params: IIsOnlineReq = {
         token: localStorage.getItem('token') || '',
         username: localStorage.getItem('username') || '',
@@ -12,7 +11,7 @@ export const isOnline = () => {
     isOnlineReq(params).then((res) => {
         // 在线
     }).catch(err => {
-        showFailToast(err.message)
+        showFailToast(err)
         router.push({ path: '/login' })
     })
 }

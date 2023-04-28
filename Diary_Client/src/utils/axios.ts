@@ -1,3 +1,4 @@
+import { router } from '@/router'
 import { IIsOnlineReq } from '@/server/login'
 import axios, { AxiosResponse } from 'axios'
 import type { AxiosInstance, AxiosRequestConfig } from 'axios'
@@ -14,7 +15,7 @@ const config: AxiosRequestConfig = {
     timeout: DEFAULT_TIME_OUT,
     headers: {
         Accept: 'application/json',
-        token: localStorage.getItem('token') || 'defaultToken',
+        token: localStorage.getItem('token') || false,
     },
     withCredentials: true,
 }
@@ -23,10 +24,10 @@ const config: AxiosRequestConfig = {
 const requestInterceptor = (config: AxiosRequestConfig): AxiosRequestConfig => {
     // 一般会请求拦截里面加token，用于后端的验证
     const token = localStorage.getItem('token') as string
-
+    
     if (token) {
         config.headers!.Authorization = token
-    }
+    } 
 
     return config
 }

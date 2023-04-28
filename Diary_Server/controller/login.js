@@ -1,8 +1,9 @@
 module.exports = {
+    // 登录接口
     index: async (fish) => {
         try {
             const {username, password} = fish.ctx.request.body
-            const res = await fish.$mysqlAsync.query(`SELECT * FROM register`)
+            const res = await fish.$mysqlAsync.query(`SELECT * FROM user`)
             const isExit = res[0].find(item => item.username === username)
             if (isExit) {
                 if (password === isExit.password) {
@@ -35,10 +36,10 @@ module.exports = {
                 console.log(error, '错误提示！！');
         }
     },
-    token: async (fish) => {
+    token: async (fish) => { // 登录状态验证
         try {
             const {token, username} = fish.ctx.request.body
-            const res = await fish.$mysqlAsync.query(`SELECT * FROM register`)
+            const res = await fish.$mysqlAsync.query(`SELECT * FROM user`)
             const isExit = res[0].find(item => item.username === username)
             if (isExit) {
                 if (isExit.token === token) {
@@ -60,7 +61,7 @@ module.exports = {
                 fish.ctx.body = {
                     result: 403,
                     data: null,
-                    message: '账号不存在！请注册！'
+                    message: '请重新登录！'
                 }
             }
         } catch (error) {

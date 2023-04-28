@@ -1,5 +1,5 @@
 <template>
-    <van-nav-bar :title="title">
+    <van-nav-bar :title="title" fixed placeholder>
         <template v-if="showLeft" #left>
             <div class="title-bar__left" @click="onClickLeft">
                 <van-icon name="arrow-left" size="18" color="#908a8ab3">
