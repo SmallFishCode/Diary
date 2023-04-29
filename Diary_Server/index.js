@@ -3,7 +3,7 @@ const serve = require('koa-static');
 const fish = new Fish()
 
 // 初始化 user 表
-fish.$mysqlAsync.query('CREATE TABLE IF NOT EXISTS user ( user_id INT AUTO_INCREMENT PRIMARY KEY, username VARCHAR(255) NOT NULL, password VARCHAR(255) NOT NULL, createTime VARCHAR(255) NOT NULL, timeNum BIGINT NOT NULL, token VARCHAR(255) NOT NULL)').then((res) => {
+fish.$mysqlAsync.query('CREATE TABLE IF NOT EXISTS user ( user_id INT AUTO_INCREMENT PRIMARY KEY, is_vip INT NOT NULL, username VARCHAR(255) NOT NULL, password VARCHAR(255) NOT NULL, createTime VARCHAR(255) NOT NULL, timeNum BIGINT NOT NULL, token VARCHAR(255) NOT NULL)').then((res) => {
     console.log('user 表创建完成！');
 }).catch((err) => {
     console.log(err, 'user 表创建失败！！！');

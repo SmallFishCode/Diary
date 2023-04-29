@@ -35,7 +35,7 @@ module.exports = {
 
                 // 获取 日记 id
                 const diaryRes = await fish.$mysqlAsync.query(`SELECT * FROM diary_info`)
-                const diaryId = diaryRes[0].length + 1
+                const diaryId = diaryRes[0][diaryRes[0].length - 1].diary_id + 1 || 1
 
                 // 创建时间 createTime
                 const createTime = dayjs().format('YYYY-MM-DD HH:mm')

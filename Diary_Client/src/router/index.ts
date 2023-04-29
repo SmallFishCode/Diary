@@ -8,6 +8,7 @@ export const routes = [
     { path: '/register', component: Register },
     { path: '/login', component: () => import('@/views/login/index.vue') },
     { path: '/edit', component: () => import('@/views/edit/index.vue') },
+    { path: '/edit/:id', component: () => import('@/views/edit/index.vue') },
     { path: '/detail/:id', component: () => import('@/views/detail/index.vue') },
 ]
 

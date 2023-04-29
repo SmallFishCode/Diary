@@ -3,14 +3,12 @@
         <template v-if="showLeft" #left>
             <div class="title-bar__left" @click="onClickLeft">
                 <van-icon name="arrow-left" size="18" color="#908a8ab3">
-                    <span class="title-bar__back">{{ leftText }}</span>
+                    <!-- <span class="title-bar__back">{{ leftText }}</span> -->
                 </van-icon>
             </div>
         </template>
         <template v-if="showRight" #right>
-            <div class="title-bar__left" @click="() => emits('on-click-right')">
-                <van-icon name="ellipsis" size="18" color="#908a8ab3" />
-            </div>
+            <slot name="titleRight"></slot>
         </template>
     </van-nav-bar>
 </template>

@@ -30,7 +30,7 @@ const style = computed(() => ({
     transition: all .7s ease-in-out;
     box-sizing: border-box;
     margin-top: 50px;
-    position: absolute;
+    position: fixed;
 
     .box {
         height: 300px;

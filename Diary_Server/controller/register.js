@@ -16,7 +16,7 @@ module.exports = {
                                 }
                         } else {
                                 const token = md5(username + password + '322603')
-                                await fish.$mysqlAsync.query(`INSERT INTO user (user_id, username, password, createTime, timeNum, token) VALUES ('${res[0].length + 1}', "${username}", "${password}", "${dayjs().format('YYYY-MM-DD HH:mm')}", "${Date.now()}", "${token}")`)
+                                await fish.$mysqlAsync.query(`INSERT INTO user (user_id, is_vip, username, password, createTime, timeNum, token) VALUES ('${res[0].length + 1}', "${0}", "${username}", "${password}", "${dayjs().format('YYYY-MM-DD HH:mm')}", "${Date.now()}", "${token}")`)
                                 fish.ctx.body = {
                                         result: 200,
                                         data: null,

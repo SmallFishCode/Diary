@@ -47,6 +47,7 @@ import { UploaderFileListItem, showFailToast } from 'vant'
 import { Buffer } from 'buffer'
 import TitleBar from '@/components/title-bar.vue'
 import { IBufferFile, editInfoReq } from '@/server/edit'
+import { router } from '@/router'
 
 const form = reactive({
     diaryText: '', // 正文内容
@@ -65,8 +66,6 @@ const onSubmit = async (values: typeof form) => {
     // 保存 bufferFileArr
     const bufferFileArr: IBufferFile[] = []
     let index = 1 // 当所有图片都加载完毕时上传
-
-    console.log(imageUrlFile)
 
     if (imageUrlFile.length) {
         imageUrlFile.forEach((item) => {
@@ -92,6 +91,7 @@ const onSubmit = async (values: typeof form) => {
                     // 上传日记信息
                     editInfoReq(params).then((res) => {
                         reset()
+                        router.push('/home')
                         index = 0
                     }).catch((err) => {
                         index = 0
@@ -109,6 +109,7 @@ const onSubmit = async (values: typeof form) => {
         // 上传日记信息
         editInfoReq(params).then((res) => {
             reset()
+            router.push('/home')
             index = 0
         }).catch((err) => {
             index = 0
