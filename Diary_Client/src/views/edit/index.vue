@@ -33,7 +33,7 @@
                         type="default"
                         native-type="submit"
                     >
-                        发布
+                        {{ route.params.id ? '更新' : '发布' }}
                     </van-button>
                 </div>
             </van-form>
@@ -44,19 +44,46 @@
 <script setup lang='ts'>
 import { reactive } from 'vue'
 import { UploaderFileListItem, showFailToast } from 'vant'
+import { useRoute, useRouter } from 'vue-router'
 import { Buffer } from 'buffer'
 import TitleBar from '@/components/title-bar.vue'
-import { IBufferFile, editInfoReq } from '@/server/edit'
-import { router } from '@/router'
+import { IBufferFile, IEditInfoReq, editInfoReq } from '@/server/edit'
+import { getCardDetail } from '@/server/detail'
+import { BASE_URL } from '@/utils/const'
 
 const form = reactive({
     diaryText: '', // 正文内容
     imageUrlArr: [] as UploaderFileListItem[], // 图片地址
 })
 
+const route = useRoute()
+const router = useRouter()
+
+// 获取到日记 id，如果存在则调用 update 接口，如果不存在调用 add 接口
+const diaryId = route.params.id as string | undefined
+
+// 获取日记详情信息
+const initCardDetailInfo = async (id: string) => {
+    const res = await getCardDetail({ id })
+    form.diaryText = res.diaryText
+
+    // vant 组件文件预览格式要求:  { url: 'https://fastly.jsdelivr.net/npm/@vant/assets/leaf.jpeg' },
+    // 详情可见: https://vant-ui.github.io/vant/#/zh-CN/uploader
+    form.imageUrlArr = res.imageUrl.map((img) => ({
+        url: BASE_URL + img, 
+    })) 
+}
+
+// 判断是否是 update 操作，如果是，则进行数据 init
+if (diaryId) {
+    initCardDetailInfo(diaryId)
+}
+
 // 提交日记信息
 const onSubmit = async (values: typeof form) => {
-    const imageUrlFile = values.imageUrlArr.map((item) => (
+    // 筛选出已存在服务器上的图片，不反复存入
+    const isExitImgArr = values.imageUrlArr.filter(item => item.url !== undefined).map(item => item.url!.slice(BASE_URL.length))
+    const imageUrlFile = values.imageUrlArr.filter(item => item.file !== undefined).map((item) => (
         {
             file: item.file!,
             name: item.file!.name,
@@ -87,16 +114,11 @@ const onSubmit = async (values: typeof form) => {
                         diaryText: values.diaryText,
                         username: localStorage.getItem('username') || '',
                         bufferFileArr,
+                        diaryId,
+                        isExitImgArr,
                     }
                     // 上传日记信息
-                    editInfoReq(params).then((res) => {
-                        reset()
-                        router.push('/home')
-                        index = 0
-                    }).catch((err) => {
-                        index = 0
-                        showFailToast(err.message)
-                    })
+                    addDiary(params)
                 }
                 index++
             }
@@ -105,17 +127,22 @@ const onSubmit = async (values: typeof form) => {
         const params = {
             diaryText: values.diaryText,
             username: localStorage.getItem('username') || '',
+            diaryId,
+            isExitImgArr,
         }
         // 上传日记信息
-        editInfoReq(params).then((res) => {
-            reset()
-            router.push('/home')
-            index = 0
-        }).catch((err) => {
-            index = 0
-            showFailToast(err.message)
-        })
+        addDiary(params)
     }
+}
+
+// add 日记
+const addDiary = (params: IEditInfoReq) => {
+    editInfoReq(params).then((res) => {
+        reset()
+        router.push('/home')
+    }).catch((err) => {
+        showFailToast(err)
+    })
 }
 
 // 重置表单

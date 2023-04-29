@@ -142,7 +142,7 @@ const clickEdit = () => {
             align-items: center;
             justify-content: center;
             position: fixed;
-            bottom: 150px;
+            bottom: 100px;
             right: 50px;
         }
     }

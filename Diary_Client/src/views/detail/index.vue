@@ -83,7 +83,7 @@ const onDeleteDiary = () => {
 
 // 更新该笔记
 const onUpdateDiary = () => {
-    router.push(`/edit/:${diaryId}`)
+    router.push(`/edit/${diaryId}`)
 }
 
 </script>
@@ -103,8 +103,7 @@ const onUpdateDiary = () => {
     &__img {
 
         img {
-            max-width: 200px;
-            min-height: 200px;
+            max-width: 300px;
         }
     }
 

@@ -27,7 +27,7 @@ module.exports = {
         quotes: ['warn', 'single'],
         'comma-dangle': ['warn', 'always-multiline'],
         'object-curly-spacing': ['warn', 'always'],
-        'max-len': ['warn', 120],
+        'max-len': ['warn', 150],
         'no-new': 'off',
         'linebreak-style': 'off',
         'import/extensions': 'off',
