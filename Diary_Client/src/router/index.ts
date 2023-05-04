@@ -27,6 +27,10 @@ router.beforeEach((to, from, next) => {
     if (['/edit'].includes(to.path)) {
         isOnline(router)
     }
+    // 编辑成功之后进行刷新操作
+    if (from.path.split('/').some(item => item === 'edit')) {
+        to.meta.keepAlive = false
+    }
     next()
     // console.log('🚀🚀~ to:', to)
     // console.log('🚀🚀~ from:', from)

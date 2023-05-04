@@ -31,6 +31,7 @@ const style = computed(() => ({
     box-sizing: border-box;
     margin-top: 50px;
     position: fixed;
+    z-index: 3;
 
     .box {
         height: 300px;

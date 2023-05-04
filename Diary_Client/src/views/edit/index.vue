@@ -154,7 +154,7 @@ const addDiary = (params: IEditInfoReq) => {
     editInfoReq(params).then((res) => {
         isLoading.value = false
         reset()
-        router.push('/home')
+        router.push({ name: 'home' })
     }).catch((err) => {
         console.log(err)
         isLoading.value = false

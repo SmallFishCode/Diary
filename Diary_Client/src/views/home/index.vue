@@ -1,65 +1,66 @@
 <template>
-    <div v-if="!isLoading" ref="home" class="home">
-        <div class="home__title">
-            <TitleBar
-                title="Home"
-                :show-left="false"
-                :show-right="true"
-                @onClickRight="onClickRight"
-            >
-                <template #titleRight>
-                    <div class="title-bar__left" @click="onClickRight">
-                        <van-icon name="ellipsis" size="18" color="#908a8ab3" />
-                    </div>
-                </template>
-            </TitleBar>
-        </div>
-        <van-pull-refresh v-model="pullRefreshLoading" @refresh="onRefresh">
-            <BoxAppear :visible="boxVisible">
-                <template #boxContent>
-                    <div class="home__box">
-                        <div class="home__box-info">
-                            <div class="home__box-info__name">{{ username }}</div>
-                        </div>
-                        <div class="home__box-menu">
-                            <MenuItem icon-name="gem-o" menu-name="开通VIP" @handleClick="getVip" />
-                            <MenuItem
-                                icon-name="search"
-                                menu-name="标签查询"
-                                @handleClick="() => {
-                                    boxVisible = false
-                                    showSearchWithTabs = true
-                                }"
-                            />
-                            <MenuItem icon-name="close" menu-name="退出登录" @handleClick="exitLogin" />
-                        </div>
-                    </div>
-                </template>
-            </BoxAppear>
-            <van-search
-                v-show="showSearchWithTabs"
-                v-model="searchTextWithTabs"
-                class="home__search-with-tabs"
-                placeholder="请输入搜索关键词"
-                autofocus
-                @search="searchDiaryWithTabs"
-            />
-            <div class="home__main">
-                <div class="home__main-edit" @click="clickEdit">
-                    <van-icon name="edit" size="30" color="#fff" />
+    <div class="home">
+        <TitleBar
+            title="Home"
+            :show-left="false"
+            :show-right="true"
+            @onClickRight="onClickRight"
+        >
+            <template #titleRight>
+                <div class="title-bar__left" @click="onClickRight">
+                    <van-icon name="ellipsis" size="18" color="#908a8ab3" />
                 </div>
-            </div>
-            <div class="home__list">
-                <DiaryCard :diary-card-list="diaryCardList" />
-            </div>
-        </van-pull-refresh>
+            </template>
+        </TitleBar>
+        <div v-if="!isLoading" ref="home" class="home__content">
+            <van-pull-refresh v-model="pullRefreshLoading" @refresh="onRefresh">
+                <BoxAppear :visible="boxVisible">
+                    <template #boxContent>
+                        <div class="home__box">
+                            <div class="home__box-info">
+                                <div class="home__box-info__name">{{ username }}</div>
+                            </div>
+                            <div class="home__box-menu">
+                                <MenuItem icon-name="gem-o" menu-name="开通VIP" @handleClick="getVip" />
+                                <MenuItem
+                                    icon-name="search"
+                                    menu-name="标签查询"
+                                    @handleClick="() => {
+                                        boxVisible = false
+                                        showSearchWithTabs = true
+                                    }"
+                                />
+                                <MenuItem icon-name="close" menu-name="退出登录" @handleClick="exitLogin" />
+                            </div>
+                        </div>
+                    </template>
+                </BoxAppear>
+                <van-search
+                    v-show="showSearchWithTabs"
+                    v-model="searchTextWithTabs"
+                    class="home__search-with-tabs"
+                    placeholder="请输入搜索关键词"
+                    autofocus
+                    @search="searchDiaryWithTabs"
+                />
+                <div class="home__main">
+                    <div class="home__main-edit" @click="clickEdit">
+                        <van-icon name="edit" size="30" color="#fff" />
+                    </div>
+                </div>
+       
+                <div class="home__list">
+                    <DiaryCard :diary-card-list="diaryCardList" />
+                </div>
+            </van-pull-refresh>
+        </div>
+        <Loading v-else />
     </div>
-    <Loading v-else />
 </template>
 
 <script setup lang='ts' name="home">
 import { ref } from 'vue'
-import { useRouter } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
 import { showToast } from 'vant'
 import TitleBar from '@/components/title-bar.vue'
 import Loading from '@/components/loading.vue'
@@ -74,6 +75,7 @@ const diaryCardList = ref<IHomeDiaryCardRes[]>([])
 const boxVisible = ref(false)
 const home = ref()
 const router = useRouter()
+const route = useRoute()
 const isLoading = ref(false)
 const pullRefreshLoading = ref(false)
 const showSearchWithTabs = ref(false)
@@ -127,16 +129,20 @@ const onRefresh = async () => {
         showToast({ message: '刷新成功', duration: 500 })
     }, 500)
 }
+
 </script>
 
 <style scoped lang='less'>
 .home {
-    padding: 19px;
+    padding: 0px 19px 19px 19px;
     height: 100vh;
-    min-height: 100vh;
     box-sizing: border-box;
     background: #F5F5F5;
     overflow-x: hidden;
+
+    &__content {
+        height: 100vh;
+    }
 
     // &__title {
     //     box-shadow: rgba(0, 0, 0, 0.4) 0px 2px 4px,
@@ -197,7 +203,6 @@ const onRefresh = async () => {
     }
 
     &__list {
-        overflow: hidden;
         padding: 0px 5px;
         box-sizing: border-box;
     }

@@ -43,6 +43,8 @@ const onClickLeft = () => router.back()
 
 <style scoped lang='less'>
 .title-bar {
+    min-height: 46px;
+    
     &__back {
         margin-left: 5px;
         color: #908a8ab3;
