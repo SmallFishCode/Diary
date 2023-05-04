@@ -3,11 +3,12 @@ import { IIsOnlineReq } from '@/server/login'
 import axios, { AxiosResponse } from 'axios'
 import type { AxiosInstance, AxiosRequestConfig } from 'axios'
 import { showFailToast, showSuccessToast } from 'vant'
+import { API_URL } from './const'
 
 // 定义一些默认值
 const DEFAULT_BASE_HOST = 'http://127.0.0.1'
 const DEFAULT_BASE_PORT = 3000
-const DEFAULT_BASE_URL = '/api/'
+const DEFAULT_BASE_URL = API_URL
 const DEFAULT_TIME_OUT = 50000
 
 // 配置 axios 的 config
@@ -86,7 +87,7 @@ export default {
             ).then((res: AxiosResponse<AjaxResponse<T>>) => {
                 resolve(res.data)
             }, (err) => {
-                reject(err.response.data)
+                reject(err.response?.data)
             })
         })
     },

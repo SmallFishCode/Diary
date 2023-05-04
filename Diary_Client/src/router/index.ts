@@ -4,7 +4,12 @@ import { isOnline } from '@/utils/token'
 
 export const routes = [
     { path: '/', redirect: '/login' },
-    { path: '/home', component: () => import('@/views/home/index.vue') },
+    { path: '/home',
+        name: 'home',
+        component: () => import('@/views/home/index.vue'),
+        meta: {
+            keepAlive: true, // 设置页面是否需要使用缓存
+        } },
     { path: '/register', component: Register },
     { path: '/login', component: () => import('@/views/login/index.vue') },
     { path: '/edit', component: () => import('@/views/edit/index.vue') },

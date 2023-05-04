@@ -1,7 +1,7 @@
 <template>
     <div class="menu" @click="() => emits('handleClick')">
         <div class="menu-icon">
-            <van-icon name="close" color="#908a8ab3" size="24" />
+            <van-icon :name="iconName" color="#908a8ab3" size="24" />
         </div>
         <div class="menu-text">{{ menuName }}</div>
     </div>
@@ -10,6 +10,10 @@
 <script setup lang='ts'>
 defineProps({
     menuName: {
+        type: String,
+        required: true,
+    },
+    iconName: {
         type: String,
         required: true,
     },

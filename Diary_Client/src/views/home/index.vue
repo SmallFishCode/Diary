@@ -1,5 +1,5 @@
 <template>
-    <div v-if="!isLoading" class="home">
+    <div v-if="!isLoading" ref="home" class="home">
         <div class="home__title">
             <TitleBar
                 title="Home"
@@ -14,49 +14,70 @@
                 </template>
             </TitleBar>
         </div>
-        <BoxAppear :visible="boxVisible">
-            <template #boxContent>
-                <div class="home__box">
-                    <div class="home__box-info">
-                        <div class="home__box-info__name">{{ username }}</div>
+        <van-pull-refresh v-model="pullRefreshLoading" @refresh="onRefresh">
+            <BoxAppear :visible="boxVisible">
+                <template #boxContent>
+                    <div class="home__box">
+                        <div class="home__box-info">
+                            <div class="home__box-info__name">{{ username }}</div>
+                        </div>
+                        <div class="home__box-menu">
+                            <MenuItem icon-name="gem-o" menu-name="开通VIP" @handleClick="getVip" />
+                            <MenuItem
+                                icon-name="search"
+                                menu-name="标签查询"
+                                @handleClick="() => {
+                                    boxVisible = false
+                                    showSearchWithTabs = true
+                                }"
+                            />
+                            <MenuItem icon-name="close" menu-name="退出登录" @handleClick="exitLogin" />
+                        </div>
                     </div>
-                    <div class="home__box-menu">
-                        <MenuItem menu-name="开通VIP" @handleClick="getVip" />
-                        <MenuItem menu-name="开通VIP" @handleClick="getVip" />
-                        <MenuItem menu-name="开通VIP" @handleClick="getVip" />
-                        <MenuItem menu-name="开通VIP" @handleClick="getVip" />
-                        <MenuItem menu-name="退出登录" @handleClick="exitLogin" />
-                    </div>
+                </template>
+            </BoxAppear>
+            <van-search
+                v-show="showSearchWithTabs"
+                v-model="searchTextWithTabs"
+                class="home__search-with-tabs"
+                placeholder="请输入搜索关键词"
+                autofocus
+                @search="searchDiaryWithTabs"
+            />
+            <div class="home__main">
+                <div class="home__main-edit" @click="clickEdit">
+                    <van-icon name="edit" size="30" color="#fff" />
                 </div>
-            </template>
-        </BoxAppear>
-        <div class="home__main">
-            <div class="home__main-edit" @click="clickEdit">
-                <van-icon name="edit" size="30" color="#fff" />
             </div>
-        </div>
-        <div class="home__list">
-            <DiaryCard :diary-card-list="diaryCardList" />
-        </div>
+            <div class="home__list">
+                <DiaryCard :diary-card-list="diaryCardList" />
+            </div>
+        </van-pull-refresh>
     </div>
     <Loading v-else />
 </template>
 
-<script setup lang='ts'>
+<script setup lang='ts' name="home">
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
+import { showToast } from 'vant'
 import TitleBar from '@/components/title-bar.vue'
 import Loading from '@/components/loading.vue'
 import BoxAppear from './components/box-appear.vue'
 import MenuItem from './components/menu-item.vue'
 import DiaryCard from './components/diary-card.vue'
 import { IHomeDiaryCardRes, getHomeDiaryCard } from '@/server/home'
+import { searchWithTabs } from '@/server/search'
 
 const diaryCardList = ref<IHomeDiaryCardRes[]>([])
 
 const boxVisible = ref(false)
+const home = ref()
 const router = useRouter()
 const isLoading = ref(false)
+const pullRefreshLoading = ref(false)
+const showSearchWithTabs = ref(false)
+const searchTextWithTabs = ref('') // 根据 tabs 搜索日记
 const username = ref(localStorage.getItem('username') || '')
 
 // 获取日记列表数据
@@ -88,12 +109,30 @@ const getVip = () => {
 const clickEdit = () => {
     router.push('/edit')
 }
+
+// 根据标签查询日记
+const searchDiaryWithTabs = async (text: string) => {
+    showSearchWithTabs.value = false
+    if (text) {
+        diaryCardList.value = await searchWithTabs({ tabs: text })
+    }
+}
    
+// 下拉刷新
+const onRefresh = async () => {
+    setTimeout(async () => {
+        await initCardList() // 刷新列表
+        searchTextWithTabs.value = ''
+        pullRefreshLoading.value = false
+        showToast({ message: '刷新成功', duration: 500 })
+    }, 500)
+}
 </script>
 
 <style scoped lang='less'>
 .home {
     padding: 19px;
+    height: 100vh;
     min-height: 100vh;
     box-sizing: border-box;
     background: #F5F5F5;
@@ -104,6 +143,16 @@ const clickEdit = () => {
     //     rgba(0, 0, 0, 0.3) 0px 7px 13px -3px, 
     //     rgba(0, 0, 0, 0.2) 0px -3px 0px inset;
     // }
+
+    &__search-with-tabs {
+        width: calc(100% - 38px);
+        padding-right: 19px;
+        box-sizing: border-box;
+        position: fixed;
+        background: #555;
+        border-radius: 5px;
+        top: 100px;
+    }
 
     &__box {
         height: 100%;
@@ -145,6 +194,12 @@ const clickEdit = () => {
             bottom: 100px;
             right: 50px;
         }
+    }
+
+    &__list {
+        overflow: hidden;
+        padding: 0px 5px;
+        box-sizing: border-box;
     }
 }
 </style>

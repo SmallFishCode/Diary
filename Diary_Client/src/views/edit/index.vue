@@ -14,6 +14,13 @@
                         show-word-limit
                         placeholder="Please input something..."
                     />
+                    <van-field
+                        v-model="form.tabs"
+                        name="tabs"
+                        placeholder="请输入标签..."
+                        show-word-limit
+                        maxlength="6"
+                    />
                     <van-field name="imageUrlArr">
                         <template #input>
                             <van-uploader
@@ -33,7 +40,8 @@
                         type="default"
                         native-type="submit"
                     >
-                        {{ route.params.id ? '更新' : '发布' }}
+                        <van-loading v-if="isLoading" type="spinner" />
+                        <span v-else>{{ route.params.id ? '更新' : '发布' }}</span>
                     </van-button>
                 </div>
             </van-form>
@@ -42,7 +50,7 @@
 </template>
 
 <script setup lang='ts'>
-import { reactive } from 'vue'
+import { reactive, ref } from 'vue'
 import { UploaderFileListItem, showFailToast } from 'vant'
 import { useRoute, useRouter } from 'vue-router'
 import { Buffer } from 'buffer'
@@ -54,10 +62,12 @@ import { BASE_URL } from '@/utils/const'
 const form = reactive({
     diaryText: '', // 正文内容
     imageUrlArr: [] as UploaderFileListItem[], // 图片地址
+    tabs: '', // 标签
 })
 
 const route = useRoute()
 const router = useRouter()
+const isLoading = ref(false)
 
 // 获取到日记 id，如果存在则调用 update 接口，如果不存在调用 add 接口
 const diaryId = route.params.id as string | undefined
@@ -66,6 +76,7 @@ const diaryId = route.params.id as string | undefined
 const initCardDetailInfo = async (id: string) => {
     const res = await getCardDetail({ id })
     form.diaryText = res.diaryText
+    form.tabs = res.tabs
 
     // vant 组件文件预览格式要求:  { url: 'https://fastly.jsdelivr.net/npm/@vant/assets/leaf.jpeg' },
     // 详情可见: https://vant-ui.github.io/vant/#/zh-CN/uploader
@@ -81,6 +92,7 @@ if (diaryId) {
 
 // 提交日记信息
 const onSubmit = async (values: typeof form) => {
+    isLoading.value = true
     // 筛选出已存在服务器上的图片，不反复存入
     const isExitImgArr = values.imageUrlArr.filter(item => item.url !== undefined).map(item => item.url!.slice(BASE_URL.length))
     const imageUrlFile = values.imageUrlArr.filter(item => item.file !== undefined).map((item) => (
@@ -112,6 +124,7 @@ const onSubmit = async (values: typeof form) => {
                 if (index === imageUrlFile.length) {
                     const params = {
                         diaryText: values.diaryText,
+                        tabs: values.tabs,
                         username: localStorage.getItem('username') || '',
                         bufferFileArr,
                         diaryId,
@@ -126,6 +139,7 @@ const onSubmit = async (values: typeof form) => {
     } else {
         const params = {
             diaryText: values.diaryText,
+            tabs: values.tabs,
             username: localStorage.getItem('username') || '',
             diaryId,
             isExitImgArr,
@@ -138,9 +152,12 @@ const onSubmit = async (values: typeof form) => {
 // add 日记
 const addDiary = (params: IEditInfoReq) => {
     editInfoReq(params).then((res) => {
+        isLoading.value = false
         reset()
         router.push('/home')
     }).catch((err) => {
+        console.log(err)
+        isLoading.value = false
         showFailToast(err)
     })
 }
@@ -159,5 +176,9 @@ const onOversize = (file: File) => {
 </script>
 
 <style scoped lang='less'>
+.edit {
+    height: 100vh;
+    overflow-y: scroll;
+}
 
 </style>

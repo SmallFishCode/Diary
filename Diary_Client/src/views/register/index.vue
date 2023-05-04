@@ -54,7 +54,8 @@ const onSubmit = (values: RegisterReq) => {
                 router.push({ path: '/login' })
             }
         }).catch(err => {
-            showFailToast(err.message)
+            console.log(err)
+            showFailToast(err)
         })
     }
 }

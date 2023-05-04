@@ -10,7 +10,8 @@ export interface IBufferFile {
 export interface IEditInfoReq {
     diaryText: string,
     username: string,
-    bufferFileArr?: IBufferFile[]
+    bufferFileArr?: IBufferFile[],
+    tabs: string, // 标签
     diaryId?: string
     isExitImgArr?: string[] // 已存在服务端的图片
 }

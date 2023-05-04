@@ -17,7 +17,12 @@
             />
         </div>
         <div class="detail__info">
-            <div class="detail__info-time">{{ dayjs(detailInfo?.diaryTime).format('YYYY-MM-DD HH:mm:ss') }}</div>
+            <div class="detail__info-time">
+                <span>{{ dayjs(detailInfo?.diaryTime).format('YYYY-MM-DD HH:mm:ss') }}</span>
+                <div v-if="detailInfo?.tabs" class="detail__info-time-tabs">
+                    <div class="detail__info-time-tabs-text">{{ detailInfo.tabs }}</div>
+                </div>
+            </div>
             <div class="detail__info-name">
                 <van-icon
                     name="edit"
@@ -73,6 +78,7 @@ const onDeleteDiary = () => {
                 router.push('/home')
             }
         }).catch((err) => {
+            console.log(err)
             showFailToast(err)
         })
     })
@@ -93,6 +99,8 @@ const onUpdateDiary = () => {
     padding: 16px;
     box-sizing: border-box;
     overflow-x: hidden;
+    overflow-y: scroll;
+    height: 100vh;
 
     &__text {
         margin-top: 10px;
@@ -117,6 +125,28 @@ const onUpdateDiary = () => {
             display: flex;
             align-items: center;
             font-weight: 600;
+        }
+
+        &-time {
+            display: flex;
+            align-items: center;
+
+            &-tabs {
+                padding: 1px 4px;
+                height: 16px;
+                background: #908a8ab3;
+                border-radius: 3px;
+                margin-left: 5px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+
+                &-text {
+                    font-weight: 500;
+                    font-size: 9px;
+                    color: #fff;
+                }
+            }
         }
     }
 }

@@ -10,7 +10,7 @@ fish.$mysqlAsync.query('CREATE TABLE IF NOT EXISTS user ( user_id INT AUTO_INCRE
 })
 
 // 初始化 diary_info 表
-fish.$mysqlAsync.query('CREATE TABLE IF NOT EXISTS diary_info ( diary_id INT AUTO_INCREMENT PRIMARY KEY, user_id INT , username VARCHAR(255) NOT NULL, text VARCHAR(255) NOT NULL, imageUrl VARCHAR(255) NOT NULL, timeNum BIGINT NOT NULL, createTime VARCHAR(255) NOT NULL)').then((res) => {
+fish.$mysqlAsync.query('CREATE TABLE IF NOT EXISTS diary_info ( diary_id INT AUTO_INCREMENT PRIMARY KEY, user_id INT , username VARCHAR(255) NOT NULL, text VARCHAR(255) NOT NULL, tabs VARCHAR(255) NOT NULL, imageUrl VARCHAR(255) NOT NULL, timeNum BIGINT NOT NULL, createTime VARCHAR(255) NOT NULL)').then((res) => {
     console.log('diary_info 表创建完成！');
 }).catch((err) => {
     console.log(err, 'diary_info 表创建失败！！！');
@@ -20,5 +20,5 @@ fish.$mysqlAsync.query('CREATE TABLE IF NOT EXISTS diary_info ( diary_id INT AUT
 // 静态服务
 fish.use(serve('.'))
 
-fish.go(3000)
+fish.go(3003)
 

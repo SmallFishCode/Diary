@@ -22,6 +22,9 @@
             </div>
             <div class="diary-card__content-info">
                 <div class="diary-card__content-info-name">{{ item.username }}</div>
+                <div v-show="item.tabs" class="diary-card__content-info-tabs">
+                    <div class="diary-card__content-info-tabs-text">{{ item.tabs }}</div>
+                </div>
             </div>
         </div>
     </div>
@@ -63,6 +66,10 @@ const toDetail = (id: number) => {
 
     &:first-child {
         margin-top: 0px;
+    }
+
+    &:last-child {
+        margin-bottom: 20px;
     }
     
     &__time {
@@ -109,10 +116,29 @@ const toDetail = (id: number) => {
 
         &-info {
             margin-top: 10px;
+            display: flex;
+            align-items: center;
 
             &-name {
                 font-weight: 600;
                 font-size: 10px;
+            }
+
+            &-tabs {
+                padding: 1px 4px;
+                height: 16px;
+                background: #908a8ab3;
+                border-radius: 3px;
+                margin-left: 5px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+
+                &-text {
+                    font-weight: 500;
+                    font-size: 9px;
+                    color: #fff;
+                }
             }
         }
     }

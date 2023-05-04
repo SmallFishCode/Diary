@@ -79,6 +79,7 @@ module.exports = {
         '@typescript-eslint/ban-types': 'off',
         'class-methods-use-this': 'off',
         'no-return-await': 'off',
+        'vue/no-template-shadow': 'off',
         'no-multiple-empty-lines': 'warn', // 最多空一行
         'no-multi-spaces': 'warn', // 单行多余空格警告
         'vue/multi-word-component-names': 'off',

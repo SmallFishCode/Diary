@@ -54,7 +54,8 @@ const onSubmit = (values: LoginReq) => {
                 router.push({ path: '/home' })
             }
         }).catch((err) => {
-            showFailToast(err.message)
+            console.log(err, 'login 页面报错')
+            showFailToast(err)
         })
     }
 }

@@ -36,7 +36,7 @@ module.exports = {
                 // fileInfo.diaryId 存在，说明为 update 操作，不存在为 add 操作
                 if (fileInfo.diaryId) {
                     // update 日记信息
-                    await fish.$mysqlAsync.query(`UPDATE diary_info SET text = "${fileInfo.diaryText}", imageUrl = "${imageUrl}", timeNum = "${Date.now()}", createTime = "${createTime}" WHERE diary_id = "${fileInfo.diaryId}"`)
+                    await fish.$mysqlAsync.query(`UPDATE diary_info SET text = "${fileInfo.diaryText}", tabs = "${fileInfo.tabs}", imageUrl = "${imageUrl}", timeNum = "${Date.now()}", createTime = "${createTime}" WHERE diary_id = "${fileInfo.diaryId}"`)
                     
                     fish.ctx.body = {
                         result: 200,
@@ -53,7 +53,7 @@ module.exports = {
                     const diaryId = diaryRes[0][diaryRes[0].length - 1].diary_id + 1 || 1
 
                     // 存数据库
-                    await fish.$mysqlAsync.query(`INSERT INTO diary_info (diary_id, user_id, username, text, imageUrl, createTime, timeNum) VALUES ("${diaryId}", "${userId}","${fileInfo.username}", "${fileInfo.diaryText}", "${imageUrl}", "${createTime}", "${Date.now()}")`)
+                    await fish.$mysqlAsync.query(`INSERT INTO diary_info (diary_id, user_id, username, text, tabs, imageUrl, createTime, timeNum) VALUES ("${diaryId}", "${userId}","${fileInfo.username}", "${fileInfo.diaryText}", "${fileInfo.tabs}", "${imageUrl}", "${createTime}", "${Date.now()}")`)
 
                     fish.ctx.body = {
                         result: 200,

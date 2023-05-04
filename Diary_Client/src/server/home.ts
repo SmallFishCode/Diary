@@ -9,6 +9,7 @@ export interface IHomeDiaryCardReq {
 export interface IHomeDiaryCardRes {
     username: string,
     diaryId: number,
+    tabs: string, // 标签
     diaryText: string,
     diaryTime: number,
     imageUrl: string[],
