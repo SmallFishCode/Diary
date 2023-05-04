@@ -12,10 +12,11 @@
   "license": "ISC",
   "dependencies": {
     "dayjs": "^1.11.7",
-    "fish-node": "^1.0.9",
+    "fish-node": "^1.0.11",
     "js-md5": "^0.7.3",
     "koa-body": "^6.0.1",
     "koa-static": "^5.0.0",
-    "nodemon": "^2.0.22"
+    "nodemon": "^2.0.22",
+    "koa2-cors": "^2.0.6"
   }
 }

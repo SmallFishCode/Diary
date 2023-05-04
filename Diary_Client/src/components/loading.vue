@@ -15,8 +15,7 @@
 
 <style scoped lang='less'>
 .loading {
-    width: 100vw;
-    height: 100vh;
+    height: calc(100vh - 70px);
     display: flex;
     align-items: center;
     justify-content: center;

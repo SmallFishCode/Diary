@@ -16,7 +16,6 @@ fish.$mysqlAsync.query('CREATE TABLE IF NOT EXISTS diary_info ( diary_id INT AUT
     console.log(err, 'diary_info 表创建失败！！！');
 })
 
-
 // 静态服务
 fish.use(serve('.'))
 

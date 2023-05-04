@@ -22,7 +22,7 @@
             </div>
             <div class="diary-card__content-info">
                 <div class="diary-card__content-info-name">{{ item.username }}</div>
-                <div v-show="item.tabs" class="diary-card__content-info-tabs">
+                <div v-if="item.tabs" class="diary-card__content-info-tabs">
                     <div class="diary-card__content-info-tabs-text">{{ item.tabs }}</div>
                 </div>
             </div>

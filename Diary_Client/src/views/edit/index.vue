@@ -1,6 +1,12 @@
 <template>
     <div class="edit">
-        <TitleBar title="Edit" />
+        <TitleBar title="Edit" :show-right="true">
+            <template v-if="diaryId" #titleRight>
+                <div class="title-bar__left" @click="onDeleteDiary">
+                    <van-icon name="delete-o" size="18" color="#908a8ab3" />
+                </div>
+            </template>
+        </TitleBar>
         <div class="edit__form">
             <van-form @submit="onSubmit">
                 <van-cell-group inset>
@@ -51,12 +57,12 @@
 
 <script setup lang='ts'>
 import { reactive, ref } from 'vue'
-import { UploaderFileListItem, showFailToast } from 'vant'
+import { UploaderFileListItem, showConfirmDialog, showFailToast } from 'vant'
 import { useRoute, useRouter } from 'vue-router'
 import { Buffer } from 'buffer'
 import TitleBar from '@/components/title-bar.vue'
 import { IBufferFile, IEditInfoReq, editInfoReq } from '@/server/edit'
-import { getCardDetail } from '@/server/detail'
+import { deleteCardDetail, getCardDetail } from '@/server/detail'
 import { BASE_URL } from '@/utils/const'
 
 const form = reactive({
@@ -171,6 +177,30 @@ const reset = () => {
 // 限制上传图片的大小
 const onOversize = (file: File) => {
     showFailToast('文件大小不能超过 5MB')
+}
+
+// 删除该条笔记
+const onDeleteDiary = () => {
+    if (diaryId) {
+        showConfirmDialog({
+            title: '确认删除',
+            message:
+    '您确定要删除该条日记吗？此操作不可逆！',
+        })
+        .then(() => {
+            deleteCardDetail({ id: diaryId }).then(res => {
+                if (res.result === 200) {
+                    router.push({ name: 'home' })
+                }
+            }).catch((err) => {
+                console.log(err)
+                showFailToast(err)
+            })
+        })
+        .catch(() => {
+        // on cancel
+        })
+    }
 }
 
 </script>

@@ -1,12 +1,6 @@
 <template>
     <div v-if="!isLoading" class="detail">
-        <TitleBar title="Detail" :show-right="true">
-            <template #titleRight>
-                <div class="title-bar__left" @click="onDeleteDiary">
-                    <van-icon name="delete-o" size="18" color="#908a8ab3" />
-                </div>
-            </template>
-        </TitleBar>
+        <TitleBar title="Detail" />
         <div class="detail__text">{{ detailInfo?.diaryText }}</div>
         <div class="detail__img">
             <img
@@ -64,28 +58,6 @@ const initCardDetailInfo = async () => {
 }
 
 initCardDetailInfo()
-
-// 删除该条笔记
-const onDeleteDiary = () => {
-    showConfirmDialog({
-        title: '确认删除',
-        message:
-    '您确定要删除该条日记吗？此操作不可逆！',
-    })
-    .then(() => {
-        deleteCardDetail({ id: diaryId }).then(res => {
-            if (res.result === 200) {
-                router.push('/home')
-            }
-        }).catch((err) => {
-            console.log(err)
-            showFailToast(err)
-        })
-    })
-    .catch(() => {
-        // on cancel
-    })
-}
 
 // 更新该笔记
 const onUpdateDiary = () => {

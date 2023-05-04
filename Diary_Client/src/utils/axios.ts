@@ -87,6 +87,8 @@ export default {
             ).then((res: AxiosResponse<AjaxResponse<T>>) => {
                 resolve(res.data)
             }, (err) => {
+                console.log(err, 'errAxios')
+                
                 reject(err.response?.data)
             })
         })

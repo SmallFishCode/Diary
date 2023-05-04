@@ -38,7 +38,7 @@
 import { ref } from 'vue'
 import { showFailToast } from 'vant'
 import { useRouter } from 'vue-router'
-import { loginReq, LoginReq } from '../../server/login'
+import { loginReq, LoginReq } from '@/server/login'
 
 const username = ref('')
 const password = ref('')
@@ -47,10 +47,16 @@ const router = useRouter()
 
 const onSubmit = (values: LoginReq) => {
     if (values) {
+        console.log(values, 'values')
+        
         loginReq(values).then((res) => {
+            console.log(res, 'res')
+            
             if (res.result === 200) {
                 username.value = ''
                 password.value = ''
+                console.log('push')
+                
                 router.push({ path: '/home' })
             }
         }).catch((err) => {
