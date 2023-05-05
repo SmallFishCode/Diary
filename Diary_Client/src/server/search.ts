@@ -3,6 +3,7 @@ import axios, { AjaxResponse } from '../utils/axios'
 const BASE_URL = 'search'
 
 export interface IGetDetailReq {
+    username: string
     tabs: string
 }
 

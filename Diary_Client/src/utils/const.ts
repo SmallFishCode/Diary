@@ -10,3 +10,6 @@ export const PORT = process.env.NODE_ENV === 'development' ? 5173 : 96
 // export const API_URL = process.env.NODE_ENV === 'development' ? '/api/' : 'http://112.124.32.18:3003/'
 
 export const API_URL = process.env.NODE_ENV === 'development' ? 'http://localhost:3003/' : 'http://112.124.32.18:3003/'
+
+// 前端地址
+export const CLIENT_BASE_URL = process.env.NODE_ENV === 'development' ? 'http://localhost:5173/login' : 'http://112.124.32.18:96/login'

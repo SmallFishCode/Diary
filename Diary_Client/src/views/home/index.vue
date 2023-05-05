@@ -4,7 +4,6 @@
             title="Home"
             :show-left="false"
             :show-right="true"
-            @onClickRight="onClickRight"
         >
             <template #titleRight>
                 <div class="title-bar__left" @click="onClickRight">
@@ -59,7 +58,7 @@
 </template>
 
 <script setup lang='ts' name="home">
-import { ref } from 'vue'
+import { ref, onActivated } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { showToast } from 'vant'
 import TitleBar from '@/components/title-bar.vue'
@@ -69,13 +68,13 @@ import MenuItem from './components/menu-item.vue'
 import DiaryCard from './components/diary-card.vue'
 import { IHomeDiaryCardRes, getHomeDiaryCard } from '@/server/home'
 import { searchWithTabs } from '@/server/search'
+import { CLIENT_BASE_URL } from '@/utils/const'
 
 const diaryCardList = ref<IHomeDiaryCardRes[]>([])
 
 const boxVisible = ref(false)
 const home = ref()
 const router = useRouter()
-const route = useRoute()
 const isLoading = ref(false)
 const pullRefreshLoading = ref(false)
 const showSearchWithTabs = ref(false)
@@ -99,7 +98,7 @@ const onClickRight = () => {
 // 退出登录
 const exitLogin = () => {
     localStorage.clear()
-    router.push('/login')
+    window.location.replace(CLIENT_BASE_URL) 
 }
 
 // 开通 VIP
@@ -116,7 +115,7 @@ const clickEdit = () => {
 const searchDiaryWithTabs = async (text: string) => {
     showSearchWithTabs.value = false
     if (text) {
-        diaryCardList.value = await searchWithTabs({ tabs: text })
+        diaryCardList.value = await searchWithTabs({ tabs: text, username: localStorage.getItem('username') || '' })
     }
 }
    
@@ -129,6 +128,10 @@ const onRefresh = async () => {
         showToast({ message: '刷新成功', duration: 500 })
     }, 500)
 }
+
+onActivated(() => {
+    boxVisible.value = false
+})
 
 </script>
 

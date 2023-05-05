@@ -35,11 +35,10 @@
 <script setup lang='ts'>
 import { ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
-import { showConfirmDialog, showFailToast } from 'vant'
 import dayjs from 'dayjs'
 import TitleBar from '@/components/title-bar.vue'
 import Loading from '@/components/loading.vue'
-import { IGetDetailRes, deleteCardDetail, getCardDetail } from '@/server/detail'
+import { IGetDetailRes, getCardDetail } from '@/server/detail'
 import { BASE_URL } from '@/utils/const'
 
 const route = useRoute()

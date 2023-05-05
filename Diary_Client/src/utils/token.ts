@@ -1,8 +1,8 @@
 import { showFailToast } from 'vant'
-import { Router } from 'vue-router'
 import { IIsOnlineReq, isOnlineReq } from '@/server/login'
+import { CLIENT_BASE_URL } from './const'
 
-export const isOnline = (router: Router) => {
+export const isOnline = () => {
     const params: IIsOnlineReq = {
         token: localStorage.getItem('token') || '',
         username: localStorage.getItem('username') || '',
@@ -12,6 +12,6 @@ export const isOnline = (router: Router) => {
         // 在线
     }).catch(err => {
         showFailToast(err)
-        router.push({ path: '/login' })
+        window.location.replace(CLIENT_BASE_URL) 
     })
 }

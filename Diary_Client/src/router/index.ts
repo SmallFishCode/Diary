@@ -25,10 +25,10 @@ export const router = createRouter({
 
 router.beforeEach((to, from, next) => {
     if (['/edit'].includes(to.path)) {
-        isOnline(router)
+        isOnline()
     }
-    // 编辑成功之后进行刷新操作
-    if (from.path.split('/').some(item => item === 'edit')) {
+    // 编辑或者登录成功之后进行刷新操作
+    if (from.path.split('/').some(item => item === 'edit' || item === 'login')) {
         to.meta.keepAlive = false
     }
     next()

@@ -1,11 +1,11 @@
 module.exports = {
 	index: async (fish) => {    // 根据标签查询日记
 		try {
-			const { tabs } = fish.ctx.request.body
+			const { tabs, username } = fish.ctx.request.body
 
 			// 根据 tabs 查询该用户的所有笔记
 			const res = await fish.$mysqlAsync.query(`SELECT * FROM diary_info`)
-			const diaryList = res[0].filter(item => item.tabs === tabs)
+			const diaryList = res[0].filter(item => item.tabs === tabs && item.username === username)
 
 			// 按照日记创建时间排序
 			diaryList?.sort((a, b) => b.timeNum - a.timeNum)
