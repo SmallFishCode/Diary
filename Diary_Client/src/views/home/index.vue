@@ -12,7 +12,7 @@
             </template>
         </TitleBar>
         <div v-if="!isLoading" class="home__content">
-            <van-pull-refresh v-model="pullRefreshLoading" @refresh="onRefresh">
+            <van-pull-refresh v-model="pullRefreshLoading" :head-height="100" @refresh="onRefresh">
                 <van-list
                     v-model:loading="loading"
                     :finished="finished"
@@ -37,6 +37,7 @@
                                             showSearchWithTabs = true
                                         }"
                                     />
+                                    <MenuItem icon-name="chart-trending-o" menu-name="统计分析" @handleClick="toECharts" />
                                     <MenuItem icon-name="close" menu-name="退出登录" @handleClick="exitLogin" />
                                 </div>
                             </div>
@@ -133,6 +134,7 @@ const exitLogin = () => {
 // 开通 VIP
 const getVip = () => {
     console.log('开通 VIP')
+    showToast('暂未开发，试试其他功能吧！')
 }
 
 // 点击编辑
@@ -163,6 +165,11 @@ const onRefresh = async () => {
         pullRefreshLoading.value = false
         showToast({ message: '刷新成功', duration: 300 })
     }, 500)
+}
+
+// 跳转统计分析页面
+const toECharts = () => {
+    router.push('/echarts')
 }
 
 onActivated(() => {
