@@ -1,9 +1,11 @@
-import axios, { type AjaxResponse } from '../utils/axios'
+import axios from '../utils/axios'
 
 const BASE_URL = 'home'
 
 export interface IHomeDiaryCardReq {
-    username: string
+    username: string,
+    page: number,
+    pageSize: number
 }
 
 export interface IHomeDiaryCardRes {

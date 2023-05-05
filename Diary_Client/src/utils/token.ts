@@ -12,6 +12,6 @@ export const isOnline = () => {
         // 在线
     }).catch(err => {
         showFailToast(err)
-        window.location.replace(CLIENT_BASE_URL) 
+        window.location.replace(`${CLIENT_BASE_URL}/login`) 
     })
 }

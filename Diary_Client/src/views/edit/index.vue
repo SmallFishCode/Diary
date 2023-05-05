@@ -63,7 +63,7 @@ import { Buffer } from 'buffer'
 import TitleBar from '@/components/title-bar.vue'
 import { IBufferFile, IEditInfoReq, editInfoReq } from '@/server/edit'
 import { deleteCardDetail, getCardDetail } from '@/server/detail'
-import { BASE_URL } from '@/utils/const'
+import { BASE_URL, CLIENT_BASE_URL } from '@/utils/const'
 
 const form = reactive({
     diaryText: '', // 正文内容
@@ -160,7 +160,7 @@ const addDiary = (params: IEditInfoReq) => {
     editInfoReq(params).then((res) => {
         isLoading.value = false
         reset()
-        router.push({ name: 'home' })
+        window.location.replace(`${CLIENT_BASE_URL}/home`) 
     }).catch((err) => {
         console.log(err)
         isLoading.value = false
@@ -190,7 +190,8 @@ const onDeleteDiary = () => {
         .then(() => {
             deleteCardDetail({ id: diaryId }).then(res => {
                 if (res.result === 200) {
-                    router.push({ name: 'home' })
+                    // router.push({ name: 'home' })
+                    window.location.replace(`${CLIENT_BASE_URL}/home`) 
                 }
             }).catch((err) => {
                 console.log(err)

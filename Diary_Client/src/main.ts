@@ -1,7 +1,7 @@
 import { createApp } from 'vue'
 import { Form, Field, CellGroup, Button, Toast,
     NavBar, Icon, Uploader, Dialog, Loading, Search,
-    PullRefresh } from 'vant'
+    PullRefresh, List, Empty } from 'vant'
 import './style.css'
 import 'vant/lib/index.css'
 import App from './App.vue'
@@ -21,6 +21,8 @@ app.use(Dialog)
 app.use(Loading)
 app.use(Search)
 app.use(PullRefresh)
+app.use(List)
+app.use(Empty)
 
 app.use(router)
 app.mount('#app')

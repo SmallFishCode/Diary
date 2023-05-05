@@ -11,47 +11,57 @@
                 </div>
             </template>
         </TitleBar>
-        <div v-if="!isLoading" ref="home" class="home__content">
+        <div v-if="!isLoading" class="home__content">
             <van-pull-refresh v-model="pullRefreshLoading" @refresh="onRefresh">
-                <BoxAppear :visible="boxVisible">
-                    <template #boxContent>
-                        <div class="home__box">
-                            <div class="home__box-info">
-                                <div class="home__box-info__name">{{ username }}</div>
+                <van-list
+                    v-model:loading="loading"
+                    :finished="finished"
+                    finished-text="没有更多了"
+                    :offset="50"
+                    :immediate-check="false"
+                    @load="initCardList"
+                >
+                    <BoxAppear :visible="boxVisible">
+                        <template #boxContent>
+                            <div class="home__box">
+                                <div class="home__box-info">
+                                    <div class="home__box-info__name">{{ username }}</div>
+                                </div>
+                                <div class="home__box-menu">
+                                    <MenuItem icon-name="gem-o" menu-name="开通VIP" @handleClick="getVip" />
+                                    <MenuItem
+                                        icon-name="search"
+                                        menu-name="标签查询"
+                                        @handleClick="() => {
+                                            boxVisible = false
+                                            showSearchWithTabs = true
+                                        }"
+                                    />
+                                    <MenuItem icon-name="close" menu-name="退出登录" @handleClick="exitLogin" />
+                                </div>
                             </div>
-                            <div class="home__box-menu">
-                                <MenuItem icon-name="gem-o" menu-name="开通VIP" @handleClick="getVip" />
-                                <MenuItem
-                                    icon-name="search"
-                                    menu-name="标签查询"
-                                    @handleClick="() => {
-                                        boxVisible = false
-                                        showSearchWithTabs = true
-                                    }"
-                                />
-                                <MenuItem icon-name="close" menu-name="退出登录" @handleClick="exitLogin" />
-                            </div>
-                        </div>
-                    </template>
-                </BoxAppear>
-                <van-search
-                    v-show="showSearchWithTabs"
-                    v-model="searchTextWithTabs"
-                    class="home__search-with-tabs"
-                    placeholder="请输入搜索关键词"
-                    autofocus
-                    @search="searchDiaryWithTabs"
-                />
-                <div class="home__main">
-                    <div class="home__main-edit" @click="clickEdit">
-                        <van-icon name="edit" size="30" color="#fff" />
+                        </template>
+                    </BoxAppear>
+                    <van-search
+                        v-show="showSearchWithTabs"
+                        v-model="searchTextWithTabs"
+                        class="home__search-with-tabs"
+                        placeholder="请输入搜索关键词"
+                        autofocus
+                        @search="searchDiaryWithTabs"
+                    />
+                    <div class="home__list">
+                        <DiaryCard v-if="!isEmpty" :diary-card-list="diaryCardList" />
+                        <van-empty v-else description="快去添加日记吧!" />
                     </div>
-                </div>
-       
-                <div class="home__list">
-                    <DiaryCard :diary-card-list="diaryCardList" />
-                </div>
+                </van-list>
             </van-pull-refresh>
+           
+            <div class="home__main">
+                <div class="home__main-edit" @click="clickEdit">
+                    <van-icon name="edit" size="30" color="#fff" />
+                </div>
+            </div>
         </div>
         <Loading v-else />
     </div>
@@ -59,7 +69,7 @@
 
 <script setup lang='ts' name="home">
 import { ref, onActivated } from 'vue'
-import { useRoute, useRouter } from 'vue-router'
+import { useRouter } from 'vue-router'
 import { showToast } from 'vant'
 import TitleBar from '@/components/title-bar.vue'
 import Loading from '@/components/loading.vue'
@@ -73,19 +83,38 @@ import { CLIENT_BASE_URL } from '@/utils/const'
 const diaryCardList = ref<IHomeDiaryCardRes[]>([])
 
 const boxVisible = ref(false)
-const home = ref()
+const page = ref(1)
 const router = useRouter()
 const isLoading = ref(false)
 const pullRefreshLoading = ref(false)
 const showSearchWithTabs = ref(false)
 const searchTextWithTabs = ref('') // 根据 tabs 搜索日记
 const username = ref(localStorage.getItem('username') || '')
+const loading = ref(false)
+const finished = ref(false)
+const isEmpty = ref(true)
 
 // 获取日记列表数据
 const initCardList = async () => {
-    isLoading.value = true
-    diaryCardList.value = await getHomeDiaryCard({ username: username.value })
-    isLoading.value = false
+    if (page.value === 1) {
+        isLoading.value = true
+    } else {
+        loading.value = true
+    }
+    setTimeout(async () => {
+        const res = await getHomeDiaryCard({ username: username.value, page: page.value, pageSize: 10 })
+        if (!res.length && !isEmpty.value) {
+            finished.value = true
+        } else {
+            diaryCardList.value.push(...res)
+        }
+        if (page.value === 1) {
+            isLoading.value = false
+            isEmpty.value = !res.length
+        }
+        loading.value = false
+        page.value++
+    }, 100)
 }
 
 initCardList()
@@ -98,7 +127,7 @@ const onClickRight = () => {
 // 退出登录
 const exitLogin = () => {
     localStorage.clear()
-    window.location.replace(CLIENT_BASE_URL) 
+    window.location.replace(`${CLIENT_BASE_URL}/login`) 
 }
 
 // 开通 VIP
@@ -116,16 +145,23 @@ const searchDiaryWithTabs = async (text: string) => {
     showSearchWithTabs.value = false
     if (text) {
         diaryCardList.value = await searchWithTabs({ tabs: text, username: localStorage.getItem('username') || '' })
+        searchTextWithTabs.value = ''
+        if (!diaryCardList.value.length) {
+            isEmpty.value = true
+        }
     }
 }
    
 // 下拉刷新
 const onRefresh = async () => {
     setTimeout(async () => {
+        finished.value = false
+        page.value = 1
+        diaryCardList.value.length = 0
         await initCardList() // 刷新列表
         searchTextWithTabs.value = ''
         pullRefreshLoading.value = false
-        showToast({ message: '刷新成功', duration: 500 })
+        showToast({ message: '刷新成功', duration: 300 })
     }, 500)
 }
 
@@ -144,14 +180,12 @@ onActivated(() => {
     overflow-x: hidden;
 
     &__content {
-        height: 100vh;
-    }
+        height: calc(100vh - 70px);
 
-    // &__title {
-    //     box-shadow: rgba(0, 0, 0, 0.4) 0px 2px 4px,
-    //     rgba(0, 0, 0, 0.3) 0px 7px 13px -3px, 
-    //     rgba(0, 0, 0, 0.2) 0px -3px 0px inset;
-    // }
+        :deep(.van-pull-refresh) {
+            min-height: 200px;
+        }
+    }
 
     &__search-with-tabs {
         width: calc(100% - 38px);
@@ -207,6 +241,7 @@ onActivated(() => {
 
     &__list {
         padding: 0px 5px;
+        height: 100%;
         box-sizing: border-box;
     }
 }
