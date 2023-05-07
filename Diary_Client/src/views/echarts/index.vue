@@ -61,7 +61,7 @@ const initTabsOptions = async () => {
         },
         series: [
             {
-                name: '使用数量',
+                name: '日记数量',
                 type: 'pie',
                 radius: '50%',
                 data: res,

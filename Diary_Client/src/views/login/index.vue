@@ -1,6 +1,6 @@
 <template>
     <div class="login">
-        <div class="login__title">烂笔头</div>
+        <div class="login__title">BMB Diary</div>
         <van-form class="login__form" @submit="onSubmit">
             <van-cell-group inset>
                 <van-field

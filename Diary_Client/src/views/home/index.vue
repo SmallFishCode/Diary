@@ -183,7 +183,7 @@ onActivated(() => {
     padding: 0px 19px 19px 19px;
     height: 100vh;
     box-sizing: border-box;
-    background: #F5F5F5;
+    // background: #F5F5F5;
     overflow-x: hidden;
 
     &__content {

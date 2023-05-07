@@ -89,6 +89,7 @@ const toDetail = (id: number) => {
             overflow: hidden;
             -webkit-box-orient: vertical;
             -webkit-line-clamp:3; /* 最大行数 */
+            white-space: pre-wrap; 
         }
 
         &-image {
